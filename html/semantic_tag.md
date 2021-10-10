@@ -27,6 +27,10 @@
 
 <br>
 
+### **_main_**
+
+- 문서의 메인 콘텐츠 지정 시 사용
+
 ### **_section_**
 
 - 본문 콘텐츠를 담음
@@ -67,8 +71,6 @@
 - 서로 관련된 내용을 구분 \<section>
 - 의미적으로 관계없는 내용 구분 \<div>
 
-### ex)
-
 ```html
 <article>
   <h1>Heading</h1>
@@ -86,3 +88,14 @@
   </section>
 </article>
 ```
+
+<br>
+
+## Other semantic tags
+
+- details : 추가적인 세부사항을 기재 (사용자에게 노출 or 숨김)
+- figure : 일러스트, 다이어그램, 사진 등
+- figcaption : figure 요소 캡션 정의
+- mark : 표시/강조된 텍스트 정의
+- summary : details 요소에 대한 표시 가능한 제목 정의
+- time : 날짜/시간 정의
