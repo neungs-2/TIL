@@ -1,4 +1,4 @@
-# Semantic tag
+# **Semantic tag**
 
 태그 이름 자체만으로 의미를 전달할 수 있는 태그
 
@@ -62,6 +62,8 @@
 - 회사소개/ 저작권/ 약관/ 제작정보 위치
 - 연락처는 \<adress> 태그 사용하여 표시
 
+---
+
 <br><br>
 
 ## **Article vs Section**
@@ -91,7 +93,7 @@
 
 <br>
 
-## Other semantic tags
+## \**Other semantic tags*체
 
 - details : 추가적인 세부사항을 기재 (사용자에게 노출 or 숨김)
 - figure : 일러스트, 다이어그램, 사진 등
