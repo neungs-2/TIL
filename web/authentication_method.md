@@ -138,3 +138,7 @@
   - JWT는 인증여부 확인을 위한 값, 유효성 검증을 위한 값, 인증정보 자체를 담고 있어서 인증서버에 묻지 않고 사용 가능
 
 ---
+
+[참고]<br>
+https://www.sauru.so/blog/basic-of-oauth2-and-jwt/<br>
+https://bcho.tistory.com/955
