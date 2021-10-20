@@ -77,4 +77,5 @@ JSON 객체를 사용하여 가볍고 자가수용적인 방식으로 정보를 
 <br>
 
 [참고] <br>
-https://mangkyu.tistory.com/56
+https://mangkyu.tistory.com/56 <br>
+https://github.com/gyoogle/tech-interview-for-developer/blob/master/Web/JWT(JSON%20Web%20Token).md
