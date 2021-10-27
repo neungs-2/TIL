@@ -110,7 +110,7 @@ https://developer.mozilla.org/ko/docs/Web/Progressive_web_apps/Offline_Service_w
   - 홈화면 추가를 통해 응용프로그램으로 설치 가능
   - 실시간 유지보수 가능
 
--단점
+- 단점
 
 - 앱 스토어, 플레이 스토어 이용 불가
 
