@@ -112,7 +112,7 @@ https://developer.mozilla.org/ko/docs/Web/Progressive_web_apps/Offline_Service_w
 
 - 단점
 
-- 앱 스토어, 플레이 스토어 이용 불가
+  - 앱 스토어, 플레이 스토어 이용 불가
 
 <br>
 
