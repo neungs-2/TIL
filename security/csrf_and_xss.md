@@ -27,8 +27,7 @@
 - **Referrer 체크**
   - 백앤드에서 요청의 referrer를 확인하여 도메인이 일치하는지 검증
   - 일반적인 경우 referrer 검증만으로 대부분의 CSRF 공격 방어 가능
-- **GET/POST 요청 구분**
-  - POST
+
 - **Security Token 사용**
 
   - Referrer 검증이 불가할 때의 대안
