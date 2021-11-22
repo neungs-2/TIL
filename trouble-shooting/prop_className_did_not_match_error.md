@@ -5,7 +5,7 @@
 ## **문제**
 
 - `Next js`, `Material UI`로 작성한 페이지 새로고침 시 style 적용 안되는 오류 발생
-- **Error Meassage**(브라우저 개발자 도구)
+- **Error Message**(브라우저 개발자 도구)
   <br>
   `Warning: Prop `className` did not match. Server: "sc-xxxxxx xxxxx" Client: "sc-yyyyyy yyyyy"`
 
