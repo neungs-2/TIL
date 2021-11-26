@@ -11,8 +11,9 @@
 
 <br>
 
-- 문제 원인
-  - **babel-plugin-styled-components**가 없기 때문
+**_문제 원인_**
+
+- **babel-plugin-styled-components**가 없기 때문
 - Babel 플러그인은 환경과 상관없이 일관된 className을 생성<br>(consistently hashed component classNames between environments)
 - styled-components는 styled 함수로 만든 컴포넌트마다 generateId 함수를 이용해 유일한 식별자를 생성
 - **컴포넌트가 생성되는 순서에 따라 같은 컴포넌트이더라도 다른 식별자가 붙을 수 있음**
