@@ -2,7 +2,8 @@
 
 ## **문제**
 
-- Redis를 새롭게 설치한 후 `redis-cli` 명령어를 입력해도 연결되지 않음
+- Redis를 새롭게 설치한 후 `sudo systemctl start redis`로 서버를 데몬 실행
+- `redis-cli` 명령어를 입력해도 연결되지 않음
 - `ps -ef | grep redis`로 살펴보니 프로세스 자체가 start 되지 않음
 - Systemctl restart로 재부팅해도 연결되지 않음
 - **Error Message**
