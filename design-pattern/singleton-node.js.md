@@ -33,4 +33,104 @@ const config = require('../conf/db');
 module.exports = mysql.createPool(config.poolOption);
 ```
 
+<br>
+
+## **Node에서 Singleton 구현 방법**
+
+<br>
+
+**_IIFE로 객체 생성_**
+
+- 즉시 실행함수를 인라인함수로 만들어서 구현 가능
+
+```js
+var singleton = (function () {
+  var instance;
+  var a = 'singleton';
+  function init() {
+    return {
+      a: a,
+      b: function () {
+        console.log(a);
+      },
+    };
+  }
+  return {
+    getInstance: function () {
+      if (!instance) {
+        instance = init();
+      }
+      return instance;
+    },
+  };
+})();
+var singletone1 = singleton.getInstance();
+var singletone2 = singleton.getInstance();
+console.log(singletone1 === singletone2); // true;
+```
+
+<br>
+
+**_Class 생성자 이용_**
+
+- 클래스의 생성자를 조작하여 싱글톤 구현 가능
+
+```js
+// singleton.js
+class PrivateSingleton {
+  constructor() {
+    this.message = 'I am an instance';
+  }
+}
+class Singleton {
+  constructor() {
+    throw new Error('Use Singleton.getInstance()');
+  }
+  static getInstance() {
+    if (!Singleton.instance) {
+      Singleton.instance = new PrivateSingleton();
+    }
+    return Singleton.instance;
+  }
+}
+module.exports = Singleton;
+```
+
+```js
+// 인스턴스 불러와서 확인
+const Singleton = require('./Singleton');
+const object = Singleton.getInstance();
+console.log(object.message); // Prints out: 'I am an instance'
+object.message = 'Foo Bar'; // Overwrite message property
+const instance = Singleton.getInstance();
+console.log(instance.message); // Prints out: 'Foo Bar'
+```
+
+<br>
+
+**_Cached Singleton_**
+
+- Node JS의 Module 캐싱의 이점을 활용한 방법 --> 추천
+
+```js
+class Singleton {
+  constructor() {
+    this.message = 'I am an instance';
+  }
+}
+module.exports = new Singleton();
+```
+
+```js
+//require해서 확인
+const Singleton = require('./Singleton');
+const object = Singleton;
+
+console.log(object.message); // Prints out: 'I am an instance'
+object.message = 'Foo Bar'; // Overwrite message property
+
+const instance = Singleton;
+console.log(instance.message); // Prints out: 'Foo Bar'
+```
+
 > **[참고]**<br> https://nodejs.org/api/modules.html#modules_caching > https://velog.io/@ehgks0000/NodeJS-Singleton-pattern
