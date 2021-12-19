@@ -74,3 +74,65 @@ filter(names, _ => _.firstName.startsWith('b')) // T는 {firstName: string}로 �
 - 지금까지 사용한 모든 타입들은 구체 타입(concrete type)
 - 하지만 어떤 타입을 사용할지 미리 알 수 없을 때 제네릭 타입을 사용
 - 꺽쇠괄호(<>)로 제네릭 타입 매개변수임을 선언
+
+<br>
+
+**_언제 제네릭 타입이 한정되는가?_**
+
+- 제네릭 타입의 선언 위치에 따라 **타입의 범위**와 **언제 구체 타입으로 한정**하는지 결정
+- 보통 제네릭 구체 타입을 한정
+
+```ts
+// <T>를 호출 시그니처의 일부로 선언
+type Filter = {
+  <T>(array:T[], f:(item:T) => boolean):T[]
+}
+
+let filter: Filter = (array, f) => {...}
+
+// <T>의 범위를 Filter의 타입 별칭으로 한정
+type Filter<T> = {
+  (array:T[], f:(item:T) => boolean):T[]
+}
+
+let filter: Filter<number> = (array, f) => {...}
+```
+
+<br>
+
+**_제네릭을 어디에 선언할 수 있는가?_**
+
+> 위의 내용과 연결됨.
+
+- 호출 시그니처를 정의 하는 방법에 따라 제네릭을 추가하는 방법이 정해짐
+- T의 범위에 따라 달라짐
+  - 개별 시그니처로 한정 = <T>를 호출 시그니처의 일부로 선언
+  - 모든 시그니처로 한정 = <T>의 범위를 Filter의 타입 별칭으로 한정
+
+<br>
+
+|      (T의 범위) ->       | 개별 시그니처로 한정 | 모든 시그니처로 한정 |
+| :----------------------: | :------------------: | :------------------: |
+| 함수 선언시 \<type> 명시 |          X           |          O           |
+|   구체 타입 한정 시기    |     함수 호출 시     |     함수 선언 시     |
+|   호출된 함수 인스턴스   |  각자 개별 T 한정값  | 모든 인스턴스 T 공유 |
+
+```ts
+// T의 범위 개별 시그니처로 한정
+type Filter = {
+  <T>(array:T[], f:(item:T) => boolean):T[]
+}
+// 위와 같지만 단축 호출 시그니처를 이용하면
+type Filter = <T>(array:T[], f: (item: T) => boolean) => T[]
+
+let filter: Filter = (array, f) => {...}
+
+// <T>의 범위 모든 시그니처로 한정
+type Filter<T> = {
+  (array:T[], f:(item:T) => boolean):T[]
+}
+// 위와 같지만 단축 호출 시그니처를 이용하면
+type Filter<T> = (array:T[], f: (item: T) => boolean) => T[]
+
+let filter: Filter<number> = (array, f) => {...}
+```
