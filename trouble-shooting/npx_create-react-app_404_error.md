@@ -5,7 +5,7 @@
 ## **문제**
 
 - `npx create-react-app 생성할_프로젝트_폴더명` 명령어 실행 시 404 Error 발생
-- Error message: npm ERR! 404 Not Found - GET https://registry.npmjs.org/creat-react-app - Not found
+- **Error message**<br> npm ERR! 404 Not Found - GET https://registry.npmjs.org/creat-react-app - Not found
 
 ---
 
