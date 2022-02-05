@@ -139,6 +139,8 @@ app.listen(80, function () {
 });
 ```
 
+<br>
+
 - **프레임워크에서 미들웨어 적용**
   - `Express`에서 `cors()` 사용시 모든 origin 허용
 
@@ -154,6 +156,8 @@ app.listen(80, function () {
   console.log('http server is listening on port 80');
 });
 ```
+
+<br>
 
 **참고**
 
