@@ -32,12 +32,12 @@
 - *A*와 *B*가 **대칭키를 공유**하는 방법
 - 공개적으로 교환할 발생기 `g`
 - mod 할 값 `p` 는 **소수**로 지정
-- *A*는 개인키 `a`를 이용하여 `ya = g**a mod p` 생성
-- *B*는 개인키 `b`를 이용하여 `yb = g**b mod p` 생성
+- *A*는 개인키 `a`를 이용하여 `A = g**a mod p` 생성
+- *B*는 개인키 `b`를 이용하여 `B = g**b mod p` 생성
 - *A*와 _B_ 서로에게 생성한 공개키를 보냄
 - *A*와 *B*는 각자의 비밀키와 공개키를 조합하여 새로운 **대칭키(비밀키)**를 생성
   - 둘이 동일한 키를 가질 수 있음
-  - `(ya)^b mod p = (yb)^a mod p`
+  - `(A)^b mod p = (B)^a mod p`
     - `m  |(a-b)`이면 `a ≡ b (mod m)` --> a는 b와 합동 --> `a mod m = b mod m`
 - 공격자 *T*는 기껏해야 `g^(a+b) mod p` 밖에 만들 수 없음
 - 숫자가 커질 수록 비밀키 `a`, `b`는 알아내기 힘듦
@@ -64,3 +64,8 @@
 > <br> https://rsec.kr/?p=242
 
 > 현대의 웹브라우저들은 기존의 디피-헬만 방식보다 **ECDHE(Elliptic-Curve Hellman)** 선호
+
+---
+
+### Tip.
+![image](https://user-images.githubusercontent.com/60606025/152733865-71a8a3c6-e08f-4481-9b4e-8a79a78c7cff.png)
