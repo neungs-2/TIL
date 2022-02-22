@@ -57,6 +57,9 @@
 <br>
 
 **_명령어 사이클_**
+
+<br>
+
 ![image](https://user-images.githubusercontent.com/60606025/155151314-6a4bd166-eaba-45ba-9b22-56bec0024880.png)
 
 - CPU가 주기억장치에서 하나의 명령어를 인출하여 실행하는 일련의 활동
@@ -78,4 +81,4 @@
 <br>
 
 - 명령어 사이클 각 단계의 자세한 동작은 아래 참고자료 확인
-> [참고]<br>https://sangcho.tistory.com/entry/%EC%A4%91%EC%95%99%EC%B2%98%EB%A6%AC%EC%9E%A5%EC%B9%98CPU<br>https://itpenote.tistory.com/660<br>
+  > [참고]<br>https://sangcho.tistory.com/entry/%EC%A4%91%EC%95%99%EC%B2%98%EB%A6%AC%EC%9E%A5%EC%B9%98CPU<br>https://itpenote.tistory.com/660<br>
