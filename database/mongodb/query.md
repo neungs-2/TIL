@@ -155,31 +155,119 @@ db.stock.find({'in_stock': 0})
 
 **_$size 연산자_**
 
+- 특정 크기의 배열을 쿼리하는 조건절
+  - `db.food.find({'fruit' : {'$size' : 3}})`
+- `$gt` 등 다른 조건절과 결합할 수 없지만 도큐먼트에 **size** 키를 추가하여 범위로 쿼리 가능
+  - `db.food.update(criteria, '$push' : {'fruit' : 'strawberry', '$inc' : {'size' : 1}})`
+  - `db.food.find('size' : {'$gt' : 3})`
+
 <br>
 
 **_$slice_**
 
-<br>
+- `find`의 두번째 매개변수에는 반환받을 특정 키를 지정
+- `$slice` 연산자를 사용하여 배열 요소의 부분집합을 반환 받을 수 있음
+- 반환 받을 키를 명시하지 않으면 모든 키를 반환
 
-**_일치하는 배열 요소의 반환_**
+```sh
+# 블로그에서 먼저 달린 댓글 10개 반환 받기
+> db.blog.posts.findOne(criteria, {'comments' : {'$slice' : 10}})
+
+# 나중에 달린 댓글 10개 반환 받기
+> db.blog.posts.findOne(criteria, {'comments' : {'$slice' : -10}})
+
+# 원하는 범위 안에 있는 결과 반환 받기
+# 처음 23개 요소 건너 뛰고 24번째부터 (idx 시작은 0 이므로) 10개 (33번째 까지) 반환
+> db.blog.posts.findOne(criteria, {'comments' : {'$slice' : [23, 10]}})
+
+# 일치하는 배열요소를 쉽게 지정하는 방법 --> $
+# find지만 첫번째로 일치하는 댓글만 반환 함
+> db.blog.posts.find({'comments.name' : 'bob'}, {'comments.$' : 1})
+```
 
 <br>
 
 **_배열 및 범위 쿼리의 상호작용_**
 
+- 도큐먼트 내 스칼라(비 배열 요소)는 쿼리 기준의 각 절과 일치해야 함
+  - {'x' : {'$gt' : 10, '$lt' : 20}} 이면 AND 조건처럼 작용하여 x는 10~20 사이 값
+- 도큐먼트 내 배열 요소는 각 절의 조건을 충족하는 도큐먼트가 일치됨
+  - OR 조건처럼 작용
+- 배열 요소를 모든 조건을 충족시키게 하려면 `$elemMatch` 연산자를 사용
+  - 단, `$elemMatch`는 비배열 요소를 일치시키지 않음
+
+```sh
+{'x' : 5}
+{'x' : 15}
+{'x' : 25}
+{'x' : [5, 25]}
+
+# [5, 25]는 10~20 범위는 아니지만 25는 10보다 크고 5는 20보다 작으므로 반환됨
+> db.test.find({'x' : {'$gt': 10, '$lt': 20}})
+{'x' : 15}
+{'x' : [5, 25]}
+
+> db.test.find({'x' : {'$elemMatch' : {'$gt': 10, '$lt': 20}}})
+# 결과 없음 --> $elemMatch는 비배열 요소를 일치시키지 않으므로
+
+# 조건을 스칼라와 배열 요소 모두 적용하기 위한 방법 --> min/max 함수를 적용
+# 주의!! min, max 함수 사용시 hint에 인덱스로 사용할 요소 꼭 제시
+> db.arrTest.find({'x': {'$gt':10, '$lt': 20}}).min({'x': 10}).max({'x' : 20}).hint({'x' : 1})
+{'x': 15}
+
+```
+
 <br>
 
-**_내장 도큐먼트에 쿼리하기_**
+### **내장 도큐먼트에 쿼리하기**
+
+- 내장 도큐먼트 쿼리는 도큐먼트 전체를 대상으로 하는 방식과 키/값 쌍 각각을 대상으로 하는 방식으로 나뉨
 
 <br>
+
+**_전체 도큐먼트를 대상으로 하는 쿼리_**
+
+- 서브 도큐먼트 전체에 쿼리하려면 query filter(criteria)가 **서브 도큐먼트와 정확히 일치** 해야함
+- 서브 도큐먼트에 없는 필드를 추가하거나 키 순서가 바뀌면 찾지 못함
+- 따라서 서브 도큐먼트에 쿼리할 때는 **특정 키로 쿼리하는 방법 추천**
+
+```sh
+{
+  'name' : {
+    'first' : 'Joe',
+    'last' : 'Schmoe'
+  },
+  'age' : 45
+}
+
+# 올바른 값 출력
+> db.people.find({'name' : {'first': 'Joe', 'last': 'Schmoe'}})
+# 위의 name 키에 해당하는 서브 도큐먼트 반환
+
+# 올바르지 않은 값
+> db.people.find({'name' : {'first': 'Joe'}})
+> db.people.find({'name' : {'last': 'Schmoe', 'first': 'Joe' }})
+# 서브 도큐먼트를 반환하지 못함
+
+# 특정 키로 쿼리
+> db.people.find({'name.first' : 'Joe', 'name.last' : 'Schmoe'})
+> db.people.find({'name.first' : 'Joe'})
+> db.people.find({'name.last' : 'Schmoe', 'name.first' : 'Joe'})
+# 모두 올바른 서브 도큐먼트를 반환
+```
+
+---
 
 <br>
 
 ## **$where 쿼리**
 
-<br>
-
-## **커서**
+- `$where` 절을 사용하면 자바스크림트를 쿼리의 일부분으로 실행 가능
+- 일반 쿼리보다 실행 느림, 인덱스도 사용할 수 없음
+  - 사용 시 쿼리 필터로 다른 조건을 한번 거른 후 세부 조정에만 사용
+- SQL Injection 등의 보안상 이유로 `$where` 사용을 제한해야 함!
+- 정말 어쩔 수 없을 때만 최후에 사용
+- 집계 표현식은 `$expr`를 사용하는 것을 권장
 
 <br>
 
