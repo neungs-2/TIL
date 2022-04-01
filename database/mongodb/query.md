@@ -66,7 +66,7 @@ db.stock.find({'in_stock': 0})
 - `$gt`: greater than (>)
 - `$gte`: greater than equal (>=)
 - `$ne`: not equal (!=)
-- ex) `db.users.findj({'age' : {'$gte': 18, '$lte': 30}})`
+- ex) `db.users.find({'age' : {'$gte': 18, '$lte': 30}})`
 
 <br>
 
