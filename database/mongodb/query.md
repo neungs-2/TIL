@@ -271,4 +271,4 @@ db.stock.find({'in_stock': 0})
 
 <br>
 
-> [참고] > <br> https://docs.mongodb.com/manual/reference/method/db.collection.find/#mongodb-method-db.collection.find > <br> MongoDB 완벽 가이드 3판
+> [참고] <br> https://docs.mongodb.com/manual/reference/method/db.collection.find/#mongodb-method-db.collection.find > <br> MongoDB 완벽 가이드 3판
