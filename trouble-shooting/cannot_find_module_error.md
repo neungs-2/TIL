@@ -24,5 +24,18 @@
 - **package.json** 내부의 `jest` 설정
 
 ```js
-
+“jest”: {
+    “moduleDirectories”: [
+      “node_modules”,
+      “src”,
+      “.”
+    ],
+    “moduleFileExtensions”: [
+      “ts”,
+      “json”,
+      “js”
+    ],
+    “roots”: [
+      “src”
+    ],
 ```
