@@ -18,6 +18,8 @@
 - 절대경로를 **상대경로**로 변경
 - 위의 경우 `src/~` 부분을 `../~`로 변경함
 
+<br>
+
 ## **해결방법 2.**
 
 - `jest`의 config 설정 변경
@@ -38,4 +40,14 @@
     “roots”: [
       “src”
     ],
+    “testRegex”: “.spec.ts$“,
+    “transform”: {
+      “^.+\\.(t|j)s$“: “ts-jest”
+    },
+    “coverageDirectory”: “../coverage”,
+    “testEnvironment”: “node”,
+    “moduleNameMapper”: {
+      “^@src/(.*)$“: “<rootDir>/$1”
+    }
+},
 ```
