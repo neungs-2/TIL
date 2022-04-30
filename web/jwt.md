@@ -27,6 +27,13 @@ JSON 객체를 사용하여 가볍고 자가수용적인 방식으로 정보를 
 
 - 토큰에서 사용할 정보의 조각들인 Claim을 담음 (JSON - key:value 쌍)
   - **Registered claim**: 토큰 정보 표현을 위해 이름이 이미 정해진 Claim으로 선택적으로 사용 가능
+    - _iss_: 토큰 발급자 (issuer)
+    - _sub_: 토큰 제목 (subject)
+    - _aud_: 토큰 대상자 (audience)
+    - _exp_: 토큰 만료시간 (expiration)
+    - _nbf_: 토큰 활성 날짜 (not before)
+    - _iat_: 토큰 발급 시간 (issued at)
+    - _jti_: 토큰 식별자 (JWT ID)
   - **Public claim**: 공개용 정보를 위한 Claim으로 충돌 방지를 위해 URI 포맷을 이용
   - **Private claim**: 서버와 클라이언트 사이 임의로 지정한 정보를 저장
 
@@ -35,9 +42,9 @@ JSON 객체를 사용하여 가볍고 자가수용적인 방식으로 정보를 
 ### **_서명(Signature)_**
 
 - 토큰을 인코딩하거나 유효성 검증을 위해 사용하는 고유한 암호화 코드
-- 헤더와 페이로드 값을 BASE64로 인코딩
+- 헤더와 페이로드 값을 BASE64Url로 인코딩
 - 인코딩 값을 비밀키를 이용하여 정해진 알고리즘으로 해싱
-- 해싱한 값을 다시 BASE64로 인코딩하여 생성
+- 해싱한 값을 다시 BASE64Url로 인코딩하여 생성
 
 ---
 
