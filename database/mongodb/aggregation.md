@@ -95,10 +95,39 @@ db.collection.aggregate([
 <br>
 
 ## **표현식**
+- **불리언 표현식 (boolean expression)**: `AND`, `OR`, `NOT` 표현식 사용 가능
+- **집합 표현식 (set expression)**: 집합 표현식을 사용 시 배열을 집합으로 사용 가능 (`교집합`, `합집합`, `차집합` 등 집합 연산 가능)
+- **비교 표현식 (comparison expression)**: 다양한 유형의 범위 필터 표현 가능
+- **산술 표현식 (arithmetic expression)**: `ceiling`, `floor`, `자연로그`, `로그`, `곱하기`, `나누기`, `더학기`, `빼기`, `제곱근` 등 산술연산 수행 가능
+- **문자열 표현식 (string expression)**: `연결 (concatenate)`, `하위 문자열 검색 (substring)`, `대소문자 검색`, `텍스트 검색` 등 관련 작업 가능
+- **배열 표현식 (array expression)**: 배열 요소의 필터링, 분해, 특정 배열에서 값의 범위를 가져오는 등 배열 조작
+- **가변적 표현식(variable expression)**: 리터럴, 날짜 값 구문 분석을 위한 식, 조건식을 사용
+- **누산기(accumulator)**: 합계, 기술 통계 및 기타 여러 유형 값을 계산 가능
 
 <br>
 
 ## **$project**
+- 선출 단계로 재구성 작업
+
+<br>
+
+***중첩 필드 승격 (nested field promoting)***
+- 중첩 객체의 경우 **점 표기법**을 이용하여 경로를 선택
+  - 출력으로 생성되는 도큐먼트에서 최상위 값이 됨
+- `$`문자는 선출 단계에서 ipo, valuation, funders에 대한 값을 지정하는데 사용
+- 아래와 같이 funders 선출하는 경우 funding_rounds와 investments가 배열이므로 해당하는 모든 funder(permalink)값들이 이차원 배열로 출력됨 (p238 참고)
+```js
+db.companies.aggregate([
+  {$match: {"funding_rounds.investments.financial_org.permalink": "greylock"}},
+  {$projectioin: {
+    _id: 0,
+    name: 1,
+    ipo: "$ipo.pub_year",
+    valuation: "$ipo.valuation_amount",
+    funders: "$funding_rounds.investments.financial_org.permalink"
+  }}
+]).pretty()
+```
 
 <br>
 
