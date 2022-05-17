@@ -207,3 +207,60 @@
 - 개별 컬렉션에서 모든 정보를 포함 시 Join은 줄어들지만 중복정보가 발생하여 성능 하락 가능성 존재
 - **확장된 참조 패턴**은 보다 적은 Join과 빠른 엑세스를 통해 성능 향상
 
+```js
+// 확장된 참조 패턴이 적용되기 전
+// customer collection
+{
+  _id: 123,
+  name: "Katrina Pope",
+  street: "123 Main St",
+  city: "Somewhere",
+  country: "Someplace",
+  date_of_birth: ISODate("1992-11-03"),
+  social_handles: [
+    twitter: "twitterID",
+    facebook: "facebookID"
+  ]
+}
+
+// order collection
+{
+  _id: ObjectId("507flf77bcf9b"),
+  date: ISODate("2019-02-18"),
+  customer_id: 123,
+  order: [
+    {
+      product: "widget",
+      qty: 5,
+      cost: {
+        value: NumberDecimal('11.99'),
+        currency: "USD"
+      }
+    }
+  ]
+}
+
+// 확장된 참조 패턴 적용 후
+// customer collection의 일부 데이터를 포함한 order collection
+{
+  _id: ObjectId("507flf77bcf9b"),
+  date: ISODate("2019-02-18"),
+  customer_id: 123,
+  shipping_address: {
+    name: "Katrina Pope",
+    street: "123 Main St",
+    city: "Somewhere",
+    country: "Someplace"
+  }
+  order: [
+    {
+      product: "widget",
+      qty: 5,
+      cost: {
+        value: NumberDecimal('11.99'),
+        currency: "USD"
+      }
+    }
+  ]
+}
+```
