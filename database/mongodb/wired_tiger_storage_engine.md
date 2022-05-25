@@ -10,4 +10,10 @@
 
 ## **Document Level Concurrency**
 
+- *WiredTiger*는 **문서 수준 동시성 제어**를 사용하여 여러 클라이언트가 컬렉션의 서로 다른 문서를 동시에 수정 가능
+- 대부분의 읽기/쓰기 작업에 대해 **Optimistic concurrency control**(낙관성 동시 제어)를 사용
+- 스토리지 엔진이 두 작업 간의 쓰기 충돌을 감지하면 MongoDB가 해당 작업을 재시도
+- 수명이 짧은 작업인 일부 전역 작업 시 **instance-wide lock** 필요
+- `collMod` 같은 일부 다른 작업에서는 **exclusive database lock** 필요
+
 > **[참고]** <br> https://www.mongodb.com/docs/manual/core/storage-engines/ <br> https://dev4u.tistory.com/811 <br> https://rastalion.me/mongodb%EC%9D%98-wiredtiger-%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80-%EC%97%94%EC%A7%84/
