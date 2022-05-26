@@ -44,6 +44,19 @@
 
 ---
 
+## **WiredTiger 엔진 내부 동작 방식**
+
+- _B-Tree_ 구조의 데이터 파일과 서버 충돌 시 데이터 복구를 위한 *저널로그*를 가짐
+- 새로운 로그 파일 생성과 사용하지 않은 파일 삭제하는 방식
+  <br>(*Oracle*의 `Redo`는 파일 내에서 로테이션 --> *MongoDB*와 다른 방식)
+- **쿼리 실행 시**
+  - 블록 매니저를 통해 필요한 데이터 블록을 디스크에서 읽어 공유 캐시에 적재
+- **도큐먼트 변경 시**
+  - *WiredTiger 스토리지 엔진*이 트랜잭션을 시작하고 커서를 이용하여 도큐먼트 내용 변경
+  - 변경 내용은 공유 캐시에 먼저 적용
+  - 변경 내용을 디스크에 저장하는 것을 기다리지 않고 저널 로그에 기록한 후 처리 결과를 리턴
+<!-- 내용 추가할 것 -->
+
 <br>
 
 > **[참고]** <br> https://www.mongodb.com/docs/manual/core/storage-engines/ <br> https://dev4u.tistory.com/811 <br> https://rastalion.me/mongodb%EC%9D%98-wiredtiger-%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80-%EC%97%94%EC%A7%84/
