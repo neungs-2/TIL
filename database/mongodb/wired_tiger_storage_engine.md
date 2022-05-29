@@ -80,7 +80,9 @@
 <br>
 
 ---
+
 ## **공유 캐시**
+
 - *WiredTiger*는 내부에서 캐시를 사용
 - 공유 캐시의 최적화는 MongoDB 처리 성능에 중요
 - MongoDB가 사용할 **캐시 사이즈**
@@ -91,10 +93,21 @@
   - 별도의 매핑 없이 메모리 주소를 이용해 바로 검색이 가능
   - 맵핑 테이블의 경합이나 오버헤드가 없음
 - *WiredTirger*는 레코드 인덱스를 별도로 관리하지 않고 페이지를 공유 캐시 메모리에 적재 시 레코드 인덱스 새롭게 생성
+  - 따라서 디스크 -> 메모리 과정은 RDBMS보다 느리게 동작하지만 캐시에 적재 후 레코드 검색 및 변경 작업은 RDBMS보다 빠르게 동작
 
+<br>
 
 ---
-## **페이지 캐시**
 
+## **운영체제 캐시** (페이지 캐시)
+
+- *WiredTiger*는 **Cached IO**를 기본 옵션으로 사용
+  - 참조하려는 데이터 페이지는 리눅스 페이지 캐시에 있는 데이터
+  - 리눅스 페이지 캐시의 데이터를 자신의 공유 캐시에 복사
+- RDBMS에서는 더블 버퍼링을 해결하기 위해 **Direct IO** 주로 사용
+  - 더블 버퍼링: OS의 페이지 캐시와 스토리지 엔진에 같은 데이터가 중복되는 것
+- **Cached IO**는 가끔 페이지 캐시 처리에서 문제가 발생할 수 있지만 **Direct IO 보다 속도가 빠름**
+
+<br>
 
 > **[참고]** <br> https://www.mongodb.com/docs/manual/core/storage-engines/ <br> https://dev4u.tistory.com/811 <br> https://rastalion.me/mongodb%EC%9D%98-wiredtiger-%EC%8A%A4%ED%86%A0%EB%A6%AC%EC%A7%80-%EC%97%94%EC%A7%84/
