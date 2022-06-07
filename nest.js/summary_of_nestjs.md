@@ -33,3 +33,27 @@
     |     `app.module.ts`      | 애플리케이션의 루트 모듈                                                           |
     |     `app.service.ts`     | 하나의 방법으로 기본 서비스를 제공                                                 |
     |        `main.ts`         | 핵심 함수 `NestFactory`를 사용하여 Nest 애플리케이션 인스턴스를 생성하는 항목 파일 |
+
+<br>
+
+---
+
+## **Main.ts 파일**
+
+```ts
+// main.ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+- `main.ts`는 애플리케이션을 `bootstrap()`하는 비동기 함수를 포함
+- 애플리케이션 인스턴스를 생성하기 위해 코어 `NestFactory` 클래스를 사용
+- `NestFactory`의 정적 메서드 `create()`을 사용하여 어플리케이션 객체를 반환
+
+> **_Tip_**<br>기본적으로 APP 생성 중 오류 발생 시 앱이 코드와 함께 종료됨 <br> 오류를 발생시키고 싶다면 `abortOnError`옵션을 비활성화 할 것 <br> `NestFactory.create(AppModule, { abortOnError: false })`
