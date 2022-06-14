@@ -264,3 +264,134 @@
   ]
 }
 ```
+
+>https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern
+---
+
+<br>
+
+## **근사패턴**(approximation pattern)
+- **리소스**(시간, 메모리, CPU)가 많이 드는 계산이 필요하지만 **정확할 필요가 없는** 경우 유용
+  - ex) 추천수, 페이지 조회수 등 (99만 9583회 -> 100만회로 표시해도 상관 없음)
+- 1회 변화 시 마다 카운터 갱신이 아닌 100회 변화시마다 카운터를 갱신하면 쓰기 횟수를 줄일 수 있음
+---
+
+<br>
+
+## **트리 패턴**(tree pattern)
+- **쿼리가 많고 계층적**인 데이터가 있을 때 적용
+- 다중 조인을 피하여 **성능이 향상**될 수 있지만 **그래프 업데이트를 관리**해야 함
+- 다양한 형태의 트리 구조 존재
+
+<br>
+
+***Model Tree Structures with Parent References***
+- 각 *document*에 트리 노드와 부모의 키를 저장
+```js
+db.categories.insertMany( [
+   { _id: "MongoDB", parent: "Databases" },
+   { _id: "dbm", parent: "Databases" },
+   { _id: "Databases", parent: "Programming" },
+   { _id: "Languages", parent: "Programming" },
+   { _id: "Programming", parent: "Books" },
+   { _id: "Books", parent: null }
+] )
+
+db.categories.createIndex( { parent: 1 } ) // 빠른 검색을 위한 인덱스 지정
+db.categories.findOne( { _id: "MongoDB" } ).parent // 노드의 부모 검색
+db.categories.find( { parent: "Databases" } ) // 부모의 직계 자식 노드 검색
+```
+
+<br>
+
+***Model Tree Structures with Child References***
+- 각 *document*에 트리 노드와 자식의 키를 저장
+- **하위 참조 패턴**은 노드가 여러 부모를 가질 수 있는 그래프를 저장하는 데 적합
+```js
+db.categories.insertMany( [
+   { _id: "MongoDB", children: [] },
+   { _id: "dbm", children: [] },
+   { _id: "Databases", children: [ "MongoDB", "dbm" ] },
+   { _id: "Languages", children: [] },
+   { _id: "Programming", children: [ "Databases", "Languages" ] },
+   { _id: "Books", children: [ "Programming" ] }
+] )
+
+db.categories.createIndex( { children: 1 } ) // 빠른 검색을 위한 인덱스 지정
+db.categories.findOne( { _id: "Databases" } ).children // 노드의 직계 자녀 검색
+db.categories.find( { children: "MongoDB" } ) // 상위, 형제 노드 검색
+```
+
+<br>
+
+***Model Tree Structures with an Array of Ancestors***
+- 부모 노드에 대한 키와 모든 조상(상위 노드)를 **배열**로 저장하는 구조
+- `Array of Ancestors` 패턴은 `Materialized Paths` 패턴보다 약간 느리지만 사용하기 쉬움
+```js
+db.categories.insertMany( [
+  { _id: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  { _id: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+  { _id: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  { _id: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+  { _id: "Programming", ancestors: [ "Books" ], parent: "Books" },
+  { _id: "Books", ancestors: [ ], parent: null }
+] )
+
+db.categories.createIndex( { ancestors: 1 } ) // 인덱스 설정
+db.categories.findOne( { _id: "MongoDB" } ).ancestors // 노드의 조상 배열 검색
+db.categories.find( { ancestors: "Programming" } ) // 조상의 모든 하위 항목 검색
+```
+
+<br>
+
+***Model Tree Structures with Materialized Paths***
+- 조상 노드의 키를 **문자열**로 저장
+- 문자열과 정규식을 사용하는 단계가 추가되지만 경로 작업이 더 유연해짐(부분 경로로 노드를 찾기)
+```js
+db.categories.insertMany( [
+   { _id: "Books", path: null },
+   { _id: "Programming", path: ",Books," },
+   { _id: "Databases", path: ",Books,Programming," },
+   { _id: "Languages", path: ",Books,Programming," },
+   { _id: "MongoDB", path: ",Books,Programming,Databases," },
+   { _id: "dbm", path: ",Books,Programming,Databases," }
+] )
+
+db.categories.find().sort( { path: 1 } ) // path 필드를 정렬하여 전체 트리 검색
+db.categories.find( { path: /,Programming,/ } ) // 정규식을 이용한 특정 노드의 하위 항목 검색
+db.categories.find( { path: /^,Books,/ } ) // 최상위 수준(Book)의 하위 항목 검색
+db.categories.createIndex( { path: 1 } ) // 인덱스 생성
+```
+- 위의 인덱스의 경우,
+  - **root가 포함**된 쿼리 (e.g. /^,Books, ... ,/)의 경우 쿼리 **성능이 크게 증가**
+  - **root가 포함되지 않은** 하위 트리 쿼리(e.g. /,Databases/)의 경우 **전체 인덱스**를 검사하므로 인덱스가 전체 컬렉션보다 훨씬 작은 경우 어느정도 성능이 향상
+
+<br>
+
+***Model Tree Structures with Nested Sets***
+- 트리를 왕복 순회하여 멈춤으로 노드를 식별
+- *application* 각 노드를 두번씩 방문 (initial stop, return stop)
+- 트리 노드에 부모의 키, 초기 멈춤(initial stop), 반환 멈춤(return stop)을 저장
+- `Nested Sets` 패턴은 **빠른 하위 트리 검색**이 가능하지만 **트리 구조 수정이 비효율적**
+  - 변경되지 않는 **정적 트리에 적합**
+
+![image](https://user-images.githubusercontent.com/60606025/173533548-76849cf7-9afe-496e-90a9-76d48156ae1e.png)
+```js
+db.categories.insertMany( [
+   { _id: "Books", parent: 0, left: 1, right: 12 },
+   { _id: "Programming", parent: "Books", left: 2, right: 11 },
+   { _id: "Languages", parent: "Programming", left: 3, right: 4 },
+   { _id: "Databases", parent: "Programming", left: 5, right: 10 },
+   { _id: "MongoDB", parent: "Databases", left: 6, right: 7 },
+   { _id: "dbm", parent: "Databases", left: 8, right: 9 }
+] )
+
+// 노드의 하위 항목 검색
+var databaseCategory = db.categories.findOne( { _id: "Databases" } );
+db.categories.find( { left: { $gt: databaseCategory.left }, right: { $lt: databaseCategory.right } } );
+```
+
+<br>
+
+> https://www.mongodb.com/blog/post/building-with-patterns-the-tree-pattern<br>https://www.mongodb.com/docs/manual/applications/data-models-tree-structures/
+---
