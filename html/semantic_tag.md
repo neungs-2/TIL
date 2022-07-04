@@ -93,7 +93,7 @@
 
 <br>
 
-## \**Other semantic tags*체
+## **Other semantic tags**
 
 - details : 추가적인 세부사항을 기재 (사용자에게 노출 or 숨김)
 - figure : 일러스트, 다이어그램, 사진 등
