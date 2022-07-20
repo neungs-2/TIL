@@ -1,6 +1,7 @@
 # **Factory Pattern**
 
 - 생성자 디자인 패턴 중 하나
+
 - **특정 구현으로부터 객체의 생성을 분리**
 - 팩토리는 함수이기 때문에 사용자에게 더 적은 유연성을 제공
 - 클래스보다 적은 면만을 노출하는 것이 가능
@@ -24,12 +25,23 @@
 
 ***코드 예시***
 - `new` 연산자로 직접 인스턴스 생성 시 코드를 특정 유형의 객체에 바인딩
+- 변경 및 확장 시 코드를 다시 확인하고 수정해야 함 => 유연성이 떨어짐
 ```js
 const image = new Image(name);
+
+// 이미지 형식마다 하나의 클래스를 지원하기 위해 Image 클래스를 쪼갠 경우
+// 코드 필요 부분마다 다음과 같이 알맞은 클래스로 인스턴스 생성
+const imageJPEG = new ImageJPEG(name);
+......
+const imageGIF = new ImageGIF(name);
+......
+const imagePNG = new ImagePNG(name);
+......
 ```
 
 <br>
 
+- 변경 가능한 부분을 바뀌지 않는 부분과 분리
 - 팩토리는 클래스를 숨겨 클래스가 확장하거나 수정하는 것을 막아줌
   - 클래스를 비공개로 유지 가능
 ```js
@@ -39,6 +51,20 @@ function createImage(name) {
 }
 
 const image = createImage('photo.jpeg');
+
+// 이미지 형식마다 하나의 클래스를 지원하기 위해 Image 클래스를 쪼갠 경우
+// 기존 코드는 그대로 두고 Factory만 수정
+function createImage(name) {
+  if (name.match(/\.jpe?g$/)) {
+    return new ImageJPEG(name);
+  } else if (name.match(/\.gif$/)) {
+    return new ImageGIF(name);
+  } else if (name.match(/\.png$/)) {
+    return new ImagePNG(name);
+  } else {
+    throw new Error('Unsupported format');
+  }
+}
 ```
 
 ---
@@ -54,3 +80,9 @@ const image = createImage('photo.jpeg');
   - **Revealing Constructor Pattern**: 생성 중에만 객체의 속성 및 함수들을 노출하는 것이 가능
   - **Builder Pattern**: 복잡한 객체 생성을 단순화
   - **Singleton Pattern** & **Dependency Injection**: 애플리케이션 내에서 모듈들을 연결 시 복잡성 제거턴
+
+
+<br>
+
+> Node.js Design Pattern Bible <br>
+> https://jusungpark.tistory.com/14
