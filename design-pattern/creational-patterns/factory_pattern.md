@@ -71,6 +71,54 @@ function createImage(name) {
 
 <br>
 
+## **캡슐화를 강제할 수 있는 매커니즘**
+- 팩토리는 **클로저** 덕분에 **캡슐화** 매커니즘으로 사용 가능
+  - **캡슐화**: 외부 코드가 컴포넌트 내부 핵심에 직접 접근하여 조작하는 것을 방지하기 위해 접근을 제어하는 것
+  - 공용 인터페이스를 통해서만 컴포넌트와 상호작용 가능
+  - 외부 코드를 컴포넌트 상세 구현과 분리
+  - **객체지향 디자인의 기본원칙**: 캡슐화, 상속, 다형성, 추상화
+- JS에서 **스코프와 클로저**를 이용하여 캡슐화를 구현
+- **private 클래스 필드**를 이용하여 외부에서 사용할 수 없게 캡슐화를 구현할 수 있음
+
+```js
+// 클로저를 사용하여 2개의 객체를 생성
+// 1) 팩토리가 반환하는 퍼블릭 인터페이스인 person 객체
+// 2) 외부에서 접근 불가능하고 person 객체의 인터페이스를 통해서만 접근 가능한 privateProperties
+
+function createPerson(name) {
+  const privateProperties = {};
+
+  const person = {
+    setName(name) {
+      if (!name) {
+        throw new Error('A person must have a name');
+      }
+      privateProperties.name = name;
+    },
+
+    getName() {
+      return privateProperties.name;
+    }
+  }
+
+  person.setName(name);
+  return person;
+}
+```
+
+---
+
+<br>
+
+## ***간단한 코드 프로파일러 만들기***
+
+
+
+---
+
+<br>
+
+
 ## **Tip.**
 ***생성자 디자인 패턴***
 - 객체의 생성과 관련된 문제들을 해결
