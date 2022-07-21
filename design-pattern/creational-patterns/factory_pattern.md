@@ -112,6 +112,77 @@ function createPerson(name) {
 
 ## ***간단한 코드 프로파일러 만들기***
 
+```js
+// 타이머를 시작/ 종료하여 소요 시간을 측정하는 Profiler 클래스
+class Profiler {
+  constructor(label) {
+    this.label = label;
+    this.lastTime = null;
+  }
+
+  start() {
+    this.lastTime = process.hrtime();
+  }
+
+  end() {
+    const diff = process.hrtime(this.lastTime);
+    console.log(`Timer "${this.label}" took ${diff[0]} second` + `and ${diff[1]} nanoseconds.`)
+  }
+}
+```
+- `Profiler` 클래스를 그대로 `export`하여 사용 시 콘솔에 로그가 많이 남을 것.
+- 애플리케이션이 production/development 모드에 따라 개발 모드가 아니라면 프로파일러 비활성화 필요
+  - 실행 모드에 따라 다른 로직으로 분기처리해야 함
+  - `Profiler` 자체 코드를 수정하거나 사용하는 코드를 수정
+  - 또는 **팩토리** 사용
+
+<br>
+
+```js
+// 팩토리를 사용하여 `export`한 코드
+const noopProfiler = {
+  start() {},
+  end() {}
+}
+
+export function creatorProfiler(label) {
+  if (process.env.NODE_ENV === 'production') {
+    return noopProfiler;
+  }
+  return new Profiler(label);
+}
+```
+- `creatorProfiler`를 사용하면 코드에서 `start()`, `end()` 메서드를 그대로 사용해도 팩토리측에서 자동으로 분기처리
+  - development 모드 시 `Profiler` 그대로 사용
+  - product 모드 시 아무 일도 하지 않는 `noopProfiler` 사용
+
+<br>
+
+```js
+// 실제 사용한 index.js 파일
+import { createProfiler } from './profiler.js'
+
+function getAllFactors(intNumber) {
+  const profiler = createProfiler(`Finding all factors of ${intNumber}`);
+
+  profiler.start();
+  const factors = [];
+  for (let factor = 2; factor <= intNumber; factor++) {
+    while ((intNumber % factor) === 0) {
+      factors.push(factor);
+      intNumber = intNumber / factor;
+    }
+  }
+  profiler.end();
+
+  return factors;
+}
+
+const myNumber = process.argv[2];
+const myFactors = getAllFactors(myNumber);
+console.log(`Factors of ${myNumber} are: `, myFactors);
+
+```
 
 
 ---
