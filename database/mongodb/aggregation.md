@@ -115,11 +115,11 @@ db.collection.aggregate([
 - 중첩 객체의 경우 **점 표기법**을 이용하여 경로를 선택
   - 출력으로 생성되는 도큐먼트에서 최상위 값이 됨
 - `$`문자는 선출 단계에서 ipo, valuation, funders에 대한 값을 지정하는데 사용
-- 아래와 같이 funders 선출하는 경우 funding_rounds와 investments가 배열이므로 해당하는 모든 funder(permalink)값들이 이차원 배열로 출력됨 (p238 참고)
+- 아래와 같이 funders를 선출하는 경우 funding_rounds와 investments가 배열이므로 해당하는 모든 funder(permalink)값들이 이차원 배열로 출력됨 (p238 참고)
 ```js
 db.companies.aggregate([
   {$match: {"funding_rounds.investments.financial_org.permalink": "greylock"}},
-  {$projectioin: {
+  {$project: {
     _id: 0,
     name: 1,
     ipo: "$ipo.pub_year",
