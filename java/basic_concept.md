@@ -2,6 +2,8 @@
 
 ## **class 파일**
 
+![image](https://user-images.githubusercontent.com/60606025/183914221-22992f6c-6795-48f1-930e-ac7a91bea872.png)
+
 - 개발자가 IDE(Integrated Development Environment)에서 구현한 `.java` 확장자를 갖는 소스코드는 기계가 해석할 수 없음
 - JAVA는 **JVM**에 의해 프로그램이 동작되므로 JVM이 해석할 수 있는 **바이트코드**로 소스코드를 **컴파일**
 - `.java` 파일을 바이트코드로 컴파일 시 `.class` 파일로 변환
