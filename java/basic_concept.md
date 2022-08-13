@@ -1,4 +1,4 @@
-# **JAVA 사전 개념 정리**
+# **JAVA 사전 개념**
 
 ## **class 파일**
 
@@ -15,6 +15,16 @@
 
 ## **class 파일 적재**
 
+![image](https://user-images.githubusercontent.com/60606025/184500395-a38f441b-8da5-471c-ab17-68c8de0ba404.png)
+
 - 자바 어플리케이션을 실행 시, 컴파일 된 `.class`파일들이 **클래스 로더**(class loader)에 의해 **JVM 메모리 중 메소드 영역에 적재**
 
-> https://junhyunny.github.io/information/java/jvm-execution-engine/ > https://math.hws.edu/javanotes/c1/s3.html
+<br>
+
+**_JVM 메모리 구조_**
+![image](https://user-images.githubusercontent.com/60606025/184500532-5aa27024-6f1f-41b5-859c-95217a0e4390.png)
+
+- 모든 **동적 할당**은 **Heap 메모리**로 이동
+- **정적 할당 및 변수 할당**은 **Stack 메모리**로 이동
+
+> https://junhyunny.github.io/information/java/jvm-execution-engine/ <br> https://math.hws.edu/javanotes/c1/s3.html <br> https://www.tcpschool.com/java/java_intro_programming
