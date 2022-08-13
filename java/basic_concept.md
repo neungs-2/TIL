@@ -17,4 +17,4 @@
 
 - 자바 어플리케이션을 실행 시, 컴파일 된 `.class`파일들이 **클래스 로더**(class loader)에 의해 **JVM 메모리 중 메소드 영역에 적재**
 
-> https://junhyunny.github.io/information/java/jvm-execution-engine/
+> https://junhyunny.github.io/information/java/jvm-execution-engine/ > https://math.hws.edu/javanotes/c1/s3.html
